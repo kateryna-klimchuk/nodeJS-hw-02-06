@@ -1,19 +1,13 @@
-const contacts = require("../../models/contacts");
 const { RequestError } = require("../../helpers");
-const Joi = require("joi");
-
-const contactsSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+const Contact = require("../../models/contact");
+const { contactsSchema } = require("../../schema/schema");
 
 const addContact = async (req, res) => {
   const { error } = contactsSchema.validate(req.body);
   if (error) {
     throw RequestError(400, error.message);
   }
-  const result = await contacts.addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
